@@ -495,3 +495,6 @@ $(call inherit-product, vendor/xiaomi/onyx/onyx-vendor.mk)
 
 # Basic Call Recorder
 $(call inherit-product, vendor/bcr/bcr.mk)
+
+# MiuiCamera
+$(call inherit-product, device/xiaomi/onyx-miuicamera/device.mk)
