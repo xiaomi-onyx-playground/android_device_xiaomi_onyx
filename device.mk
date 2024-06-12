@@ -327,7 +327,8 @@ PRODUCT_PACKAGES += \
     SettingsProviderOverlayOnyxCN \
     SecureElementOverlayOnyx \
     WifiOverlayOnyx \
-    WifiOverlayOnyxCN
+    WifiOverlayOnyxCN \
+    DeviceAsWebcamResOnyx \
 
 # Partitions
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
