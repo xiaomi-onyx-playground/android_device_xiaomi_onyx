@@ -63,6 +63,7 @@
 import /vendor/etc/init/hw/init.qti.kernel.rc
 
 on early-init
+    setprop ro.boot.hardware.revision ${ro.boot.hwc}_${ro.boot.hwlevel}_${ro.boot.hwversion}
     write /proc/sys/kernel/printk_devkmsg ratelimited
     export MEMTAG_OPTIONS off
 
