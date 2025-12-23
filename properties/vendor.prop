@@ -193,6 +193,7 @@ ro.hardware.keystore_desede=true
 
 # Media
 debug.c2.use_dmabufheaps=1
+debug.sdm.support_writeback=0
 debug.stagefright.c2inputsurface=-1
 media.c2.hal.selection=aidl
 ro.mediaserver.64b.enable=true
