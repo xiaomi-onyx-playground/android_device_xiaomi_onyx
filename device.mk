@@ -492,3 +492,6 @@ PRODUCT_COPY_FILES += \
 
 # Vendor
 $(call inherit-product, vendor/xiaomi/onyx/onyx-vendor.mk)
+
+# Basic Call Recorder
+$(call inherit-product, vendor/bcr/bcr.mk)

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo 'Cloning BCR'
+	git clone https://github.com/xiaomi-onyx-playground/android_vendor_bcr.git -b lineage-23.2 vendor/bcr
+
 echo 'Cloning Hardware'
         git clone  https://github.com/xiaomi-onyx-playground/android_hardware_xiaomi.git -b lineage-23.2 hardware/xiaomi
 
