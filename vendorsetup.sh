@@ -3,6 +3,9 @@
 echo 'Cloning BCR'
 	git clone https://github.com/xiaomi-onyx-playground/android_vendor_bcr.git -b lineage-24.0 vendor/bcr
 
+echo 'Cloning Dolby'
+	git clone https://github.com/xiaomi-onyx-playground/android_packages_apps_LunarisDolby.git -b lineage-24.0 packages/apps/LunarisDolby
+
 echo 'Cloning Hardware'
         git clone  https://github.com/xiaomi-onyx-playground/android_hardware_xiaomi.git -b lineage-24.0 hardware/xiaomi
 
