@@ -518,3 +518,6 @@ $(call inherit-product, vendor/bcr/bcr.mk)
 
 # LeicaCamera
 $(call inherit-product-if-exists, vendor/xiaomi/onyx-leicacamera/onyx-leicacamera-vendor.mk)
+
+# Pvt-Keys
+$(call inherit-product, vendor/sharmagrit-priv/keys/keys.mk)
