@@ -270,3 +270,6 @@ include vendor/xiaomi/onyx/BoardConfigVendor.mk
 
 # MiuiCamera
 -include device/xiaomi/onyx-miuicamera/BoardConfig.mk
+
+# Game Turbo
+include packages/apps/NotGameTurbo/BoardConfig.mk
