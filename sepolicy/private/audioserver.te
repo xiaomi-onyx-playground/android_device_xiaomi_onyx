@@ -1,0 +1,6 @@
+# Dolby Volume Leveler: AudioFlinger (audioserver) reads the leveler control
+# props in its mixer thread (native Volume Leveler in Threads.cpp). audioserver
+# is coredomain and dolby_audio_prop is a public prop, so reads are already
+# permitted; this explicit grant documents the dependency and guards the
+# real-time read path against a silent property_get failure.
+get_prop(audioserver, dolby_audio_prop)

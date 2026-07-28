@@ -52,6 +52,10 @@ TARGET_BOOTLOADER_BOARD_NAME := sun
 # Display
 TARGET_SCREEN_DENSITY := 504
 
+# Dolby — ported HIDL stack board config (sepolicy dir, odm.prop, HIDL VINTF).
+# The dolby control app + native AIDL/DAX3 stack are wired via device.mk/dolby.mk.
+include vendor/lunaris/dolby/BoardConfigDolby.mk
+
 # Filesystem
 TARGET_FS_CONFIG_GEN := $(DEVICE_PATH)/configs/config.fs
 
@@ -61,9 +65,11 @@ DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += \
     hardware/qcom-caf/common/vendor_framework_compatibility_matrix.xml \
 
 DEVICE_MATRIX_FILE := hardware/qcom-caf/common/compatibility_matrix_aidl.xml
-DEVICE_MANIFEST_FILE := \
+DEVICE_MANIFEST_FILE += \
     $(DEVICE_PATH)/configs/hidl/manifest.xml \
-    hardware/qcom-caf/sm8750/audio/primary-hal/configs/sun/manifest_audio_qti_services.xml
+    hardware/qcom-caf/sm8750/audio/primary-hal/configs/sun/manifest_audio_qti_services.xml \
+    vendor/xiaomi/onyx/proprietary/vendor/etc/vintf/manifest/dms-service.xml \
+    vendor/xiaomi/onyx/proprietary/vendor/etc/vintf/manifest/vendor.dolby.media.c2-default-service-dax.xml
 
 # Kernel
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true

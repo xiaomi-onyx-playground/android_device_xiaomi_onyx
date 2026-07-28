@@ -22,6 +22,9 @@ $(call inherit-product, packages/modules/Virtualization/apex/product_packages.mk
 $(call soong_config_set,rfs,mpss_firmware_symlink_target,modem_firmware)
 $(call inherit-product, hardware/qcom-caf/common/common.mk)
 
+# DolbyAtmos
+$(call inherit-product-if-exists, vendor/lunaris/dolby/dolby.mk)
+
 # A/B
 AB_OTA_POSTINSTALL_CONFIG += \
     RUN_POSTINSTALL_system=true \
@@ -72,16 +75,104 @@ PRODUCT_PACKAGES += \
     android.hardware.audio.common-V1-ndk.vendor \
     android.hardware.audio.core-V2-ndk.vendor \
     android.hardware.audio.core.sounddose-V1-ndk.vendor \
-    libalsautilsv2.vendor \
+    android.hardware.audio.core.sounddose-V2-ndk.vendor \
+    android.hardware.audio.effect-V3-ndk.vendor \
     libaudioaidlcommon.vendor \
+    libalsautilsv2.vendor \
     libaudioutils_shim \
     libmediautils_vendor.vendor \
     libmemunreachable.vendor
 
+# C2 HIDL compatibility libs (needed by vendor.dolby.media.c2-default-service-dax)
+PRODUCT_PACKAGES += \
+    android.hardware.media.c2@1.0.vendor \
+    android.hardware.media.c2@1.1.vendor \
+    android.hardware.media.c2@1.2.vendor \
+    libcodec2_hidl@1.0.vendor \
+    libcodec2_hidl@1.1.vendor \
+    libcodec2_hidl@1.2.vendor \
+    libcodec2_soft_common.vendor
+
+# Dolby — full native AIDL/DAX3 stack (libs deeply coupled via dependency chain):
+# codec → libdmshal.so → libdapparamstorage.so + vendor.dolby.dms/hardware IPC.
+# DMS SERVICE DAEMON (vendor.dolby.dms.service) IS now installed below — it is the
+# param backend for the DAP effect; without it the effect no-ops/mutes ("Dolby audio
+# loss"). The daemon is gated by persist.sys.lunaris.dolby.backend (default: aidl) so
+# it only runs when the native backend is active (see dolby/dms-service.rc).
+DOLBY_VENDOR := vendor/xiaomi/onyx/proprietary
+PRODUCT_COPY_FILES += \
+    $(DOLBY_VENDOR)/vendor/bin/hw/vendor.dolby.media.c2-default-service-dax:$(TARGET_COPY_OUT_VENDOR)/bin/hw/vendor.dolby.media.c2-default-service-dax \
+    $(DOLBY_VENDOR)/vendor/lib64/libcodec2_store_dolby.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libcodec2_store_dolby.so \
+    $(DOLBY_VENDOR)/vendor/lib64/libdolbydecoderprocessor.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libdolbydecoderprocessor.so \
+    $(DOLBY_VENDOR)/vendor/lib64/libdolbyeglcore.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libdolbyeglcore.so \
+    $(DOLBY_VENDOR)/vendor/lib64/libdolbyottcameracontrol.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libdolbyottcameracontrol.so \
+    $(DOLBY_VENDOR)/vendor/lib64/libqcodec2_dolbydecoderfilter.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libqcodec2_dolbydecoderfilter.so \
+    $(DOLBY_VENDOR)/vendor/lib64/libdolbyclstc.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libdolbyclstc.so \
+    $(DOLBY_VENDOR)/vendor/lib64/libdeccfg.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libdeccfg.so \
+    $(DOLBY_VENDOR)/vendor/lib64/libcodec2_soft_ac4dec.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libcodec2_soft_ac4dec.so \
+    $(DOLBY_VENDOR)/vendor/lib64/libcodec2_soft_ddpdec.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libcodec2_soft_ddpdec.so \
+    $(DOLBY_VENDOR)/vendor/lib64/libdmshal.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libdmshal.so \
+    $(DOLBY_VENDOR)/vendor/lib64/libdapparamstorage.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libdapparamstorage.so \
+    $(DOLBY_VENDOR)/vendor/lib64/libdlbdsservice.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libdlbdsservice.so \
+    $(DOLBY_VENDOR)/vendor/lib64/libdlbpreg.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libdlbpreg.so \
+    $(DOLBY_VENDOR)/vendor/lib64/vendor.dolby.dms-V1-ndk.so:$(TARGET_COPY_OUT_VENDOR)/lib64/vendor.dolby.dms-V1-ndk.so \
+    $(DOLBY_VENDOR)/vendor/lib64/vendor.dolby.hardware.dms@2.0.so:$(TARGET_COPY_OUT_VENDOR)/lib64/vendor.dolby.hardware.dms@2.0.so \
+    $(DOLBY_VENDOR)/vendor/lib64/soundfx/libmiwndnsprocessingaidl.so:$(TARGET_COPY_OUT_VENDOR)/lib64/soundfx/libmiwndnsprocessingaidl.so \
+    $(DOLBY_VENDOR)/vendor/lib64/soundfx/libhwdapaidl.so:$(TARGET_COPY_OUT_VENDOR)/lib64/soundfx/libhwdapaidl.so \
+    $(DOLBY_VENDOR)/vendor/lib64/soundfx/libdlbvolaidl.so:$(TARGET_COPY_OUT_VENDOR)/lib64/soundfx/libdlbvolaidl.so \
+    $(DOLBY_VENDOR)/vendor/lib64/soundfx/libswspatializeraidl.so:$(TARGET_COPY_OUT_VENDOR)/lib64/soundfx/libswspatializeraidl.so \
+    $(DOLBY_VENDOR)/vendor/lib64/soundfx/libswgamedapaidl.so:$(TARGET_COPY_OUT_VENDOR)/lib64/soundfx/libswgamedapaidl.so \
+    $(DOLBY_VENDOR)/vendor/etc/init/vendor.dolby.media.c2-default-service-dax.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/vendor.dolby.media.c2-default-service-dax.rc \
+    $(DOLBY_VENDOR)/vendor/etc/media_codecs_dolby_audio.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_dolby_audio.xml \
+    $(DOLBY_VENDOR)/vendor/etc/dolby/dax-default.xml:$(TARGET_COPY_OUT_VENDOR)/etc/dolby/dax-default.xml \
+    $(DOLBY_VENDOR)/vendor/etc/dolby/dax-default-spatializer.xml:$(TARGET_COPY_OUT_VENDOR)/etc/dolby/dax-default-spatializer.xml \
+    $(DOLBY_VENDOR)/odm/etc/dolby/dax-default.xml:$(TARGET_COPY_OUT_ODM)/etc/dolby/dax-default.xml \
+    $(DOLBY_VENDOR)/odm/etc/dolby/dax-default-spatializer.xml:$(TARGET_COPY_OUT_ODM)/etc/dolby/dax-default-spatializer.xml \
+    $(DOLBY_VENDOR)/odm/etc/surfaceflinger/dolby_vision.cfg:$(TARGET_COPY_OUT_ODM)/etc/surfaceflinger/dolby_vision.cfg \
+    $(DOLBY_VENDOR)/odm/vendor/etc/dolby_vision.cfg:$(TARGET_COPY_OUT_ODM)/vendor/etc/dolby_vision.cfg \
+    $(DOLBY_VENDOR)/odm/bin/hw/dvs-aidl-service:$(TARGET_COPY_OUT_ODM)/bin/hw/dvs-aidl-service \
+    $(DOLBY_VENDOR)/odm/etc/init/dvs-aidl-service.rc:$(TARGET_COPY_OUT_ODM)/etc/init/dvs-aidl-service.rc \
+    $(DOLBY_VENDOR)/odm/vendor/persist/display/dolby_vision.cfg:$(TARGET_COPY_OUT_ODM)/vendor/persist/display/dolby_vision.cfg
+
+# Dolby DMS service daemon (DAP param backend) — binary from blobs, but a
+# switch-gated init.rc from the device tree (NOT the blob dms-service.rc, which
+# would auto-start unconditionally and duplicate the service definition).
+# The VINTF manifest (dms-service.xml) is already merged via DEVICE_MANIFEST_FILE
+# in BoardConfig.mk — do NOT also copy it here as a fragment (double-declaration).
+PRODUCT_COPY_FILES += \
+    $(DOLBY_VENDOR)/vendor/bin/hw/vendor.dolby.dms.service:$(TARGET_COPY_OUT_VENDOR)/bin/hw/vendor.dolby.dms.service \
+    $(LOCAL_PATH)/dolby/dms-service.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/dms-service.rc
+
+# Dolby Vision - VINTF manifest
+ODM_MANIFEST_FILES += \
+    $(DOLBY_VENDOR)/odm/etc/vintf/manifest/dvs-aidl-service.xml
+
 AUDIO_HAL_DIR := hardware/qcom-caf/sm8750/audio/primary-hal
 
+# Dolby audio_effects_config backend selection.
+#   DOLBY_RUNTIME_SWITCH=false (default): native AIDL config is copied straight to the
+#     RO search path — guaranteed-good, boots with native Dolby, no persist plumbing.
+#   DOLBY_RUNTIME_SWITCH=true: reboot-time A/B switch — both configs shipped under
+#     /vendor/etc/audio/dolby, the search path is a symlink into /mnt/vendor/persist
+#     populated by dolby-effects-switch.rc per persist.sys.lunaris.dolby.backend.
+#     Requires on-device validation of init ordering + persist labeling (sepolicy).
+DOLBY_RUNTIME_SWITCH ?= false
+
+ifeq ($(DOLBY_RUNTIME_SWITCH),true)
 PRODUCT_COPY_FILES += \
-    $(AUDIO_HAL_DIR)/configs/sun/audio_effects_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/sku_tuna/audio_effects_config.xml \
+    $(LOCAL_PATH)/configs/audio/audio_effects_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/dolby/audio_effects_config_aidl.xml \
+    $(LOCAL_PATH)/configs/audio/audio_effects_config_hidl.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/dolby/audio_effects_config_hidl.xml \
+    $(LOCAL_PATH)/dolby/dolby-effects-switch.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/dolby-effects-switch.rc
+PRODUCT_PACKAGES += \
+    dolby_effects_config_symlink \
+    dolby_effects_alt_symlink
+else
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/audio/audio_effects_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/sku_tuna/audio_effects_config.xml \
+    $(LOCAL_PATH)/configs/audio/audio_effects_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/sku_tuna/audio_effects.xml
+endif
+
+PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/audio/audio_module_config_primary.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/audio_module_config_primary.xml \
     $(LOCAL_PATH)/configs/audio/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/sku_tuna/audio_policy_configuration.xml
 
@@ -143,7 +234,11 @@ PRODUCT_PACKAGES += \
     android.hardware.graphics.composer3-V3-ndk.vendor \
     vendor.qti.hardware.display.aiqe-V2-ndk.vendor  \
     vendor.qti.hardware.display.config-V12-ndk.vendor  \
-    vendor.qti.hardware.display.composer3-V1-ndk.vendor 
+    vendor.qti.hardware.display.composer3-V1-ndk.vendor
+
+# Device features
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/onyx_features.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/device_features/onyx.xml
 
 # DRM
 PRODUCT_PACKAGES += \

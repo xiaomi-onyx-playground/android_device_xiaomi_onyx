@@ -1,0 +1,6 @@
+# Dolby Volume Leveler: dolby control app (system_app, SET) -> audioserver (GET).
+# persist.audio.dolby.* is otherwise typed audio_prop (settable only by
+# mediaserver/system_server/vendor_init), so the app SystemProperties.set()
+# would be denied. Dedicated type so the app can write and audioserver reads
+# it in the AudioFlinger mixer (native Volume Leveler in Threads.cpp).
+system_public_prop(dolby_audio_prop)

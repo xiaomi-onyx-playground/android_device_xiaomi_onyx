@@ -1,0 +1,6 @@
+# Dolby Volume Leveler: allow the dolby control app (runs as system_app) to set
+# its control props persist.audio.dolby.volume_leveler[.boost] (dolby_audio_prop).
+# Without this the app's SystemProperties.set() is denied (audio_prop is not
+# settable by system_app), so the in-app Volume Leveler toggle silently no-ops.
+# system_app is coredomain, so it reads the (public) prop back without get_prop.
+set_prop(system_app, dolby_audio_prop)

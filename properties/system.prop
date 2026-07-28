@@ -24,5 +24,17 @@ persist.vendor.data.mode=concurrent
 ril.subscription.types=NV,RUIM
 telephony.lteOnCdmaDevice=1
 
+# Unlock 10-Bit Pro Video & Vlog (Master Cinema)
+ro.vendor.camera.features.mimovie=1
+persist.vendor.camera.mimovie.10bit=1
+ro.vendor.camera.vlog.enable=1
+ro.vendor.camera.video.hdr10plus=1
+
+# Unlock 4K 60FPS Video Recording
+ro.vendor.camera.video.4k60fps=1
+ro.vendor.camera.features.4k60fps=1
+persist.vendor.camera.video.4k60fps=1
+ro.vendor.camera.features.video.4k60fps=1
+
 # WFD
 persist.debug.wfd.enable=1

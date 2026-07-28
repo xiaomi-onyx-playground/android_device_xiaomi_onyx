@@ -3,6 +3,15 @@
 echo 'Cloning BCR'
 	git clone https://github.com/xiaomi-onyx-playground/android_vendor_bcr.git -b lineage-23.2 vendor/bcr
 
+echo 'Cloning Dolby'
+	git clone https://github.com/xiaomi-onyx-playground/android_vendor_lunaris_dolby -b lineage-23.2 vendor/lunaris/dolby
+
+echo 'Patch DolbyAudio'
+	cd frameworks/av
+	git fetch https://github.com/xiaomi-onyx-playground/frameworks_av.git
+	git cherry-pick 52b3acaa609f071580918add5c527f10b1e2768e
+	croot
+
 echo 'Cloning Hardware'
         git clone  https://github.com/xiaomi-onyx-playground/android_hardware_xiaomi.git -b lineage-23.2 hardware/xiaomi
 

@@ -1,0 +1,9 @@
+# Allow Dolby app (system_app) to communicate with DMS AIDL service
+typeattribute system_app hal_aidl_dms_client;
+allow system_app hal_aidl_dms_service:service_manager find;
+binder_call(system_app, hal_aidl_dms_default)
+
+# Allow Dolby app to read/write DMS SQLite database
+# Use dedicated dolby_data_file type to avoid vendor_data_file neverallow
+allow system_app dolby_data_file:dir { search read open getattr };
+allow system_app dolby_data_file:file { read write open getattr lock };

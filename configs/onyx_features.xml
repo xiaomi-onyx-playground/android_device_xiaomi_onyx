@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features>
+<!-- Audio BEGIN -->
+    <!-- whether support qcom_sound-->
+    <bool name="support_qcom_sound">true</bool>
+    <!--whether support pause in hfr recording-->
+    <bool name="support_hfr_video_pause">false</bool>
+    <!--whether the device supports screenrecorder inner-sound recorder mode-->
+    <integer name="support_inner_record">1</integer>
+    <!--whether the device supports 24bit record -->
+    <bool name="support_24bit_record">true</bool>
+    <!--whether the device supports dolby-->
+    <bool name="support_dolby">true</bool>
+    <!-- Whether support dolby version brighten -->
+    <bool name="support_dolby_version_brighten">true</bool>
+    <!--whether the device supports voip record -->
+    <bool name="support_voip_record">true</bool>
+    <!--whether the device supports conversation_tool_box voip record -->
+    <bool name="support_conversation_toolbox_voiprecord">true</bool>
+<!-- Audio END -->
+</features>

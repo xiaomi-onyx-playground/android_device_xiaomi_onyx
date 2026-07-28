@@ -218,6 +218,19 @@
             channels="2" />
     </EncoderProfile>
 
+    <EncoderProfile quality="highspeed2160p" fileFormat="mp4" duration="30">
+      <Video codec="h264"
+            bitRate="100000000"
+            width="3840"
+            height="2160"
+            frameRate="60" />
+
+      <Audio codec="aac"
+            bitRate="156000"
+            sampleRate="48000"
+            channels="2" />
+    </EncoderProfile>
+
     <EncoderProfile quality="8kuhd" fileFormat="mp4" duration="30">
       <Video codec="h264"
             bitRate="74000000"
@@ -803,6 +816,19 @@
             sampleRate="48000"
             channels="2" />
     </EncoderProfile>
+
+    <EncoderProfile quality="highspeed2160p" fileFormat="mp4" duration="30">
+      <Video codec="h264"
+            bitRate="100000000"
+            width="3840"
+            height="2160"
+            frameRate="60" />
+
+      <Audio codec="aac"
+            bitRate="156000"
+            sampleRate="48000"
+            channels="2" />
+    </EncoderProfile>
 -->
 
     <EncoderProfile quality="8kuhd" fileFormat="mp4" duration="30">
@@ -1191,6 +1217,19 @@
             channels="2" />
     </EncoderProfile>
 
+    <EncoderProfile quality="highspeed2160p" fileFormat="mp4" duration="30">
+      <Video codec="h264"
+            bitRate="100000000"
+            width="3840"
+            height="2160"
+            frameRate="60" />
+
+      <Audio codec="aac"
+            bitRate="156000"
+            sampleRate="48000"
+            channels="2" />
+    </EncoderProfile>
+
     <EncoderProfile quality="8kuhd" fileFormat="mp4" duration="30">
       <Video codec="h264"
             bitRate="74000000"
@@ -1556,6 +1595,19 @@
             width="3840"
             height="2160"
             frameRate="30" />
+
+      <Audio codec="aac"
+            bitRate="156000"
+            sampleRate="48000"
+            channels="2" />
+    </EncoderProfile>
+
+    <EncoderProfile quality="highspeed2160p" fileFormat="mp4" duration="30">
+      <Video codec="h264"
+            bitRate="100000000"
+            width="3840"
+            height="2160"
+            frameRate="60" />
 
       <Audio codec="aac"
             bitRate="156000"
