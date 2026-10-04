@@ -1,0 +1,1 @@
+allow mediacodec hal_aidl_dms_service:service_manager find;
