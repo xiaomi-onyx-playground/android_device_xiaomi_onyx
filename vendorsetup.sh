@@ -1,5 +1,16 @@
 #!/bin/bash
 
+echo '5g icon path'
+	cd frameworks/opt/telephony
+	git fetch https://github.com/xiaomi-onyx-playground/luna_frameworks_opt_telephony.git
+	git cherry-pick 403e28cfe85917cfe00a34e22e81c54aca176d31
+	croot
+
+        cd frameworks/base
+        git fetch https://github.com/xiaomi-onyx-playground/luna_frameworks_base.git
+        git cherry-pick 4948b672e5bc206ce7029f8603244d3cbde20b4f
+        croot
+
 echo 'Cloning BCR'
 	git clone https://github.com/xiaomi-onyx-playground/android_vendor_bcr.git -b lineage-23.2 vendor/bcr
 
